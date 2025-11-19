@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dash-vite-plugin"
+version = "0.1.0"
+description = "A Dash plugin for integrating Vite using Dash 3.x hooks"
+readme = "README.md"
+requires-python = ">=3.8"
+authors = [{name = "insistence", email = "3055204202@qq.com"}]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Framework :: Dash",
+]
+dependencies = [
+    "dash>=3.0.3",
+    "py-node-manager>=0.1.1",
+]
+
+[project.urls]
+Homepage = "https://github.com/HogaStack/dash-vite-plugin"
+Documentation = "https://github.com/HogaStack/dash-vite-plugin"
+Repository = "https://github.com/HogaStack/dash-vite-plugin"
+Issues = "https://github.com/HogaStack/dash-vite-plugin/issues"
+
+[project.optional-dependencies]
+dev = ["build", "pytest", "pytest-cov", "twine"]
+
+[tool.setuptools]
+packages = ["dash_vite_plugin"]
