@@ -345,16 +345,10 @@ export default defineConfig(({ command }) => {
             if self.is_cli:
                 logger.info('⚙️ Creating index.html file...')
 
-            if not os.path.exists(self.index_html_path):
-                if self.is_cli:
-                    logger.info(
-                        f'🔍 index.html file {self.index_html_path} not found. Creating default index.html file...'
-                    )
+            self.create_default_index_html()
 
-                self.create_default_index_html()
-
-                if self.is_cli:
-                    logger.info(f'💾 Default index.html file created at: {self.index_html_path}')
+            if self.is_cli:
+                logger.info(f'💾 Default index.html file created at: {self.index_html_path}')
 
             if not self._check_npm_init():
                 init_cmd = [self.npm_path, 'init', '-y']
