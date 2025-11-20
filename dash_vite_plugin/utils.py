@@ -126,7 +126,7 @@ export default defineConfig(({ command }) => {
         Returns:
             None
         """
-        script_content = '\n'.join(
+        script_content = '\n    '.join(
             [f'<script type="module" src="{entry_js_path}"></script>' for entry_js_path in self.entry_js_paths]
         )
         index_html_content = f"""<!DOCTYPE html>
