@@ -14,14 +14,24 @@ with open('assets/react/App.jsx', 'w') as f:
 const App = () => {
   const [message, setMessage] = useState("Hello from React!");
 
+  const updateDash = () => {
+    setMessage("Hello from React!");
+    window.dash_clientside.set_props('dash-title', { children: 'Hello from React!' });
+  };
+
   const updateMessage = () => {
-    setMessage("React is working!");
+    setMessage("Hello from Dash!");
   };
 
   return (
     <div id="react-app" style={{ margin: "20px" }}>
       <h1 style={{ color: "#42b883" }}>{message}</h1>
-      <button onClick={updateMessage}>Click me!</button>
+      <div>
+        <button id="control-dash-button" onClick={updateDash}>Control Dash</button>
+      </div>
+      <div hidden>
+        <button id="control-react-button" onClick={updateMessage}>Control Vue</button>
+      </div>
     </div>
   );
 };
@@ -81,7 +91,8 @@ vite_plugin = VitePlugin(
         NpmPackage('react'),
         NpmPackage('react-dom'),
     ],
-    clean_after=False,
+    download_node=True,
+    clean_after=True,
 )
 
 # Call setup BEFORE creating Dash app (as required by the plugin architecture)
@@ -99,74 +110,46 @@ app.layout = html.Div(
         html.H1('Vite Plugin Test - React Support', id='header'),
         html.P('This tests the Vite plugin with React support.', id='paragraph'),
         # Container for React app
-        html.Div(id='react-container'),
-        html.Div(id='react-out'),
-        html.Div(id='js-test-result'),
-        html.Button('Test JS', id='js-test-button', n_clicks=0),
-        html.Button('Test React', id='react-test-button', n_clicks=0),
+        html.Div(
+            [
+                'The content from React',
+                html.Div(id='react-container'),
+            ]
+        ),
+        html.Div(
+            [
+                'The content from Dash',
+                html.Div(
+                    [html.H1('Hello from Dash!', id='dash-title'), html.Button('Control React', id='dash-button')],
+                    id='dash-app',
+                    style={'margin': '20px'},
+                ),
+            ],
+            id='dash-container',
+        ),
     ]
 )
 
-# Add callback to test JavaScript execution
-app.clientside_callback(
-    """
-    function(n_clicks) {
-        if (n_clicks > 0) {
-            // Test if global variable exists
-            if (typeof window.testVariable !== 'undefined' && window.testVariable === 'VitePluginReactTest') {
-                return 'JavaScript behavior is working correctly';
-            } else {
-                return 'Global variable test failed';
-            }
-        }
-        return 'Click button to test JavaScript';
-    }
-    """,
-    Output('js-test-result', 'children'),
-    Input('js-test-button', 'n_clicks'),
-)
 
 # Add callback to test React functionality with a simpler approach
 app.clientside_callback(
     """
-    async function(n_clicks) {
-        function delay(ms) {
-            return new Promise(resolve => setTimeout(resolve, ms));
-        }
-        async function testReactApp() {
-            const reactApp = document.getElementById('react-app');
-            if (reactApp) {
-                const button = reactApp.querySelector('button');
-                if (button) {
-                    const originalText = reactApp.querySelector('h1').textContent;
-                    button.click();
-                    await delay(0);
-                    const newText = reactApp.querySelector('h1').textContent;
-                    if (newText === 'React is working!') {
-                        return 'React is working correctly: ' + newText;
-                    } else {
-                        throw new Error('React button click failed. Original: ' + originalText + ', New: ' + newText);
-                    }
-                } else {
-                    throw new Error('React button not found');
-                }
-            } else {
-                throw new Error('React app not found');
+    function(n_clicks) {
+      if (n_clicks > 0) {
+        const reactApp = document.getElementById('react-app');
+        if (reactApp) {
+            const button = reactApp.querySelector('#control-react-button');
+            if (button) {
+                button.click();
+                return 'Hello from Dash!';
             }
         }
-        if (n_clicks > 0) {
-            try {
-                const result = await testReactApp();
-                return result;
-            } catch (error) {
-                return error.message;
-            }
-        }
-        return 'Click button to test React';
+      }
+      return 'Hello from Dash!';
     }
     """,
-    Output('react-out', 'children'),
-    Input('react-test-button', 'n_clicks'),
+    Output('dash-title', 'children'),
+    Input('dash-button', 'n_clicks'),
 )
 
 

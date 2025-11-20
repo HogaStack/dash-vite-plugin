@@ -12,7 +12,12 @@ with open('assets/vue/App.vue', 'w') as f:
     f.write("""<template>
   <div id="vue-app">
     <h1>{{ message }}</h1>
-    <button @click="updateMessage">Click me!</button>
+    <div>
+      <button id="control-dash-button" @click="updateDash">Control Dash</button>
+    </div>
+    <div hidden>
+      <button id="control-vue-button" @click="updateMessage">Control Vue</button>
+    </div>
   </div>
 </template>
 
@@ -21,8 +26,13 @@ import { ref } from "vue";
 
 const message = ref("Hello from Vue!");
 
+const updateDash = () => {
+  message.value = "Hello from Vue!";
+  window.dash_clientside.set_props('dash-title', { children: 'Hello from Vue!' });
+};
+
 const updateMessage = () => {
-  message.value = "Vue is working!";
+  message.value = "Hello from Dash!";
 };
 </script>
 
@@ -84,9 +94,10 @@ vite_plugin = VitePlugin(
     build_assets_paths=['assets/js', 'assets/vue'],
     entry_js_paths=['assets/js/main.js'],
     npm_packages=[
-        NpmPackage('vue'),  # Removed version to use default/latest
+        NpmPackage('vue'),
     ],
-    clean_after=False,
+    download_node=True,
+    clean_after=True,
 )
 
 # Call setup BEFORE creating Dash app (as required by the plugin architecture)
@@ -104,74 +115,46 @@ app.layout = html.Div(
         html.H1('Vite Plugin Test - Vue Support', id='header'),
         html.P('This tests the Vite plugin with Vue support.', id='paragraph'),
         # Container for Vue app
-        html.Div(id='vue-container'),
-        html.Div(id='vue-out'),
-        html.Div(id='js-test-result'),
-        html.Button('Test JS', id='js-test-button', n_clicks=0),
-        html.Button('Test Vue', id='vue-test-button', n_clicks=0),
+        html.Div(
+            [
+                'The content from Vue',
+                html.Div(id='vue-container'),
+            ]
+        ),
+        html.Div(
+            [
+                'The content from Dash',
+                html.Div(
+                    [html.H1('Hello from Dash!', id='dash-title'), html.Button('Control Vue', id='dash-button')],
+                    id='dash-app',
+                    style={'margin': '20px'},
+                ),
+            ],
+            id='dash-container',
+        ),
     ]
 )
 
-# Add callback to test JavaScript execution
-app.clientside_callback(
-    """
-    function(n_clicks) {
-        if (n_clicks > 0) {
-            // Test if global variable exists
-            if (typeof window.testVariable !== 'undefined' && window.testVariable === 'VitePluginVueTest') {
-                return 'JavaScript behavior is working correctly';
-            } else {
-                return 'Global variable test failed';
-            }
-        }
-        return 'Click button to test JavaScript';
-    }
-    """,
-    Output('js-test-result', 'children'),
-    Input('js-test-button', 'n_clicks'),
-)
 
 # Add callback to test Vue functionality with a simpler approach
 app.clientside_callback(
     """
-    async function(n_clicks) {
-        function delay(ms) {
-            return new Promise(resolve => setTimeout(resolve, ms));
-        }
-        async function testVueApp() {
-            const vueApp = document.getElementById('vue-app');
-            if (vueApp) {
-                const button = vueApp.querySelector('button');
-                if (button) {
-                    const originalText = vueApp.querySelector('h1').textContent;
-                    button.click();
-                    await delay(0);
-                    const newText = vueApp.querySelector('h1').textContent;
-                    if (newText === 'Vue is working!') {
-                        return 'Vue is working correctly: ' + newText;
-                    } else {
-                        throw new Error('Vue button click failed. Original: ' + originalText + ', New: ' + newText);
-                    }
-                } else {
-                    throw new Error('Vue button not found');
-                }
-            } else {
-                throw new Error('Vue app not found');
+    function(n_clicks) {
+      if (n_clicks > 0) {
+        const vueApp = document.getElementById('vue-app');
+        if (vueApp) {
+            const button = vueApp.querySelector('#control-vue-button');
+            if (button) {
+                button.click();
+                return 'Hello from Dash!';
             }
         }
-        if (n_clicks > 0) {
-            try {
-                const result = await testVueApp();
-                return result;
-            } catch (error) {
-                return error.message;
-            }
-        }
-        return 'Click button to test Vue';
+      }
+      return 'Hello from Dash!';
     }
     """,
-    Output('vue-out', 'children'),
-    Input('vue-test-button', 'n_clicks'),
+    Output('dash-title', 'children'),
+    Input('dash-button', 'n_clicks'),
 )
 
 
