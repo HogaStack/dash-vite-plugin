@@ -38,7 +38,7 @@ class TestVitePlugin:
         assert plugin.support_less is False
         assert plugin.support_sass is False
         assert plugin.download_node is False
-        assert plugin.node_version == '18.17.0'
+        assert plugin.node_version == '18.20.8'
         assert plugin.clean_after is False
         assert plugin.skip_build_if_recent is True
         assert plugin.skip_build_time_threshold == 5
