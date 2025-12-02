@@ -59,6 +59,7 @@ class TestDashIntegration:
             build_assets_paths=['assets/js'],
             entry_js_paths=['assets/js/main.js'],
             npm_packages=[NpmPackage('react')],
+            download_node=True,
             clean_after=False,
         )
 
@@ -202,6 +203,7 @@ class TestDashIntegration:
             entry_js_paths=['assets/js/main.js'],
             npm_packages=[NpmPackage('react')],
             support_less=True,
+            download_node=True,
             clean_after=False,
         )
 
@@ -289,6 +291,7 @@ class TestDashIntegration:
             build_assets_paths=['./assets/css', 'assets/js'],  # These should be ignored by Dash
             entry_js_paths=['assets/js/main.js'],
             npm_packages=[NpmPackage('react')],
+            download_node=True,
             clean_after=False,
         )
 
@@ -362,6 +365,7 @@ class TestDashIntegration:
             build_assets_paths=['assets/js'],
             entry_js_paths=['assets/js/main.js'],
             npm_packages=[NpmPackage('react')],
+            download_node=True,
             clean_after=False,
             skip_build_if_recent=True,
             skip_build_time_threshold=5,  # 5 second threshold
@@ -459,6 +463,7 @@ class TestDashIntegration:
             entry_js_paths=['assets/js/main.js'],
             npm_packages=[NpmPackage('react')],
             plugin_tmp_dir='_custom_vite',
+            download_node=True,
             clean_after=False,
         )
 
@@ -535,6 +540,7 @@ class TestDashIntegration:
             build_assets_paths=['assets/js'],
             entry_js_paths=['assets/js/main.js'],
             npm_packages=[NpmPackage('react')],
+            download_node=True,
             clean_after=True,
         )
 
@@ -678,6 +684,7 @@ class TestDashIntegration:
             build_assets_paths=['assets/js', 'assets/vue'],
             entry_js_paths=['assets/js/main.js'],
             npm_packages=[NpmPackage('vue')],
+            download_node=True,
             clean_after=False,
         )
 
@@ -878,6 +885,7 @@ class TestDashIntegration:
                 NpmPackage('react'),
                 NpmPackage('react-dom'),
             ],
+            download_node=True,
             clean_after=False,
         )
 

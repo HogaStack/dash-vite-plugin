@@ -27,7 +27,7 @@ class VitePlugin:
         support_less: bool = False,
         support_sass: bool = False,
         download_node: bool = False,
-        node_version: str = '18.17.0',
+        node_version: str = '18.20.8',
         clean_after: bool = False,
         skip_build_if_recent: bool = True,
         skip_build_time_threshold: int = 5,
