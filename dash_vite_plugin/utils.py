@@ -163,7 +163,9 @@ export default defineConfig(({ command }) => {
         """
         check_cmd = [self.npx_path, 'vite --help']
 
-        result = subprocess.run(check_cmd, capture_output=True, text=True, cwd=self.plugin_tmp_dir, env=self.node_env)
+        result = subprocess.run(
+            check_cmd, capture_output=True, text=True, cwd=self.plugin_tmp_dir, env=self.node_env, encoding='utf-8'
+        )
         return result.returncode == 0
 
     def _check_npm_package(self, package_name: str, package_type: Literal['devDependencies', 'dependencies']) -> bool:
@@ -225,7 +227,12 @@ export default defineConfig(({ command }) => {
                     '@vitejs/plugin-vue',
                 ]
                 result = subprocess.run(
-                    install_cmd, capture_output=True, text=True, cwd=self.plugin_tmp_dir, env=self.node_env
+                    install_cmd,
+                    capture_output=True,
+                    text=True,
+                    cwd=self.plugin_tmp_dir,
+                    env=self.node_env,
+                    encoding='utf-8',
                 )
                 if result.returncode != 0:
                     raise RuntimeError(result.stderr)
@@ -253,7 +260,12 @@ export default defineConfig(({ command }) => {
                     'less',
                 ]
                 result = subprocess.run(
-                    install_cmd, capture_output=True, text=True, cwd=self.plugin_tmp_dir, env=self.node_env
+                    install_cmd,
+                    capture_output=True,
+                    text=True,
+                    cwd=self.plugin_tmp_dir,
+                    env=self.node_env,
+                    encoding='utf-8',
                 )
                 if result.returncode != 0:
                     raise RuntimeError(result.stderr)
@@ -281,7 +293,12 @@ export default defineConfig(({ command }) => {
                     'sass',
                 ]
                 result = subprocess.run(
-                    install_cmd, capture_output=True, text=True, cwd=self.plugin_tmp_dir, env=self.node_env
+                    install_cmd,
+                    capture_output=True,
+                    text=True,
+                    cwd=self.plugin_tmp_dir,
+                    env=self.node_env,
+                    encoding='utf-8',
                 )
                 if result.returncode != 0:
                     raise RuntimeError(result.stderr)
@@ -309,7 +326,12 @@ export default defineConfig(({ command }) => {
                     f'{package.name}@{package.version}',
                 ]
                 result = subprocess.run(
-                    install_cmd, capture_output=True, text=True, cwd=self.plugin_tmp_dir, env=self.node_env
+                    install_cmd,
+                    capture_output=True,
+                    text=True,
+                    cwd=self.plugin_tmp_dir,
+                    env=self.node_env,
+                    encoding='utf-8',
                 )
                 if result.returncode != 0:
                     raise RuntimeError(result.stderr)
@@ -353,7 +375,12 @@ export default defineConfig(({ command }) => {
             if not self._check_npm_init():
                 init_cmd = [self.npm_path, 'init', '-y']
                 result = subprocess.run(
-                    init_cmd, capture_output=True, text=True, cwd=self.plugin_tmp_dir, env=self.node_env
+                    init_cmd,
+                    capture_output=True,
+                    text=True,
+                    cwd=self.plugin_tmp_dir,
+                    env=self.node_env,
+                    encoding='utf-8',
                 )
                 if result.returncode != 0:
                     raise RuntimeError(result.stderr)
@@ -394,7 +421,7 @@ export default defineConfig(({ command }) => {
             build_cmd: List[str] = [self.npx_path, 'vite', 'build']
 
             result = subprocess.run(
-                build_cmd, capture_output=True, text=True, cwd=self.plugin_tmp_dir, env=self.node_env
+                build_cmd, capture_output=True, text=True, cwd=self.plugin_tmp_dir, env=self.node_env, encoding='utf-8'
             )
 
             if result.returncode != 0:
