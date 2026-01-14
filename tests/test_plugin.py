@@ -730,6 +730,114 @@ class TestVitePlugin:
         expected_ignore = ['css', 'js']
         assert mock_app.config.assets_path_ignore == expected_ignore
 
+    def test_set_assets_path_ignore_extends_existing(self):
+        """Test _set_assets_path_ignore method extends existing assets_path_ignore."""
+        build_assets_paths = ['./assets/css', 'assets/js']
+        entry_js_paths = ['assets/js/main.js']
+        npm_packages = [NpmPackage('react')]
+
+        plugin = VitePlugin(
+            build_assets_paths=build_assets_paths, entry_js_paths=entry_js_paths, npm_packages=npm_packages
+        )
+
+        # Create a mock Dash app with existing assets_path_ignore
+        class MockConfig:
+            def __init__(self):
+                self.assets_folder = 'assets'
+                self.assets_path_ignore = ['existing/ignore']
+
+        mock_app = MagicMock()
+        mock_app.config = MockConfig()
+
+        # Call _set_assets_path_ignore
+        plugin._set_assets_path_ignore(mock_app)
+
+        # Check that assets_path_ignore was extended correctly
+        expected_ignore = ['existing/ignore', 'css', 'js']
+        assert mock_app.config.assets_path_ignore == expected_ignore
+
+    def test_set_assets_path_ignore_no_matching_paths(self):
+        """Test _set_assets_path_ignore method when no paths match assets_dir_name."""
+        build_assets_paths = ['other/css', './public/js']
+        entry_js_paths = ['assets/js/main.js']
+        npm_packages = [NpmPackage('react')]
+
+        plugin = VitePlugin(
+            build_assets_paths=build_assets_paths, entry_js_paths=entry_js_paths, npm_packages=npm_packages
+        )
+
+        # Create a mock Dash app with real config object
+        class MockConfig:
+            def __init__(self):
+                self.assets_folder = 'assets'
+                self.assets_path_ignore = []
+
+        mock_app = MagicMock()
+        mock_app.config = MockConfig()
+
+        # Call _set_assets_path_ignore
+        plugin._set_assets_path_ignore(mock_app)
+
+        # Check that assets_path_ignore remains empty
+        assert mock_app.config.assets_path_ignore == []
+
+    def test_set_assets_path_ignore_empty_build_assets_paths(self):
+        """Test _set_assets_path_ignore method when build_assets_paths is empty."""
+        build_assets_paths = []
+        entry_js_paths = ['assets/js/main.js']
+        npm_packages = [NpmPackage('react')]
+
+        plugin = VitePlugin(
+            build_assets_paths=build_assets_paths, entry_js_paths=entry_js_paths, npm_packages=npm_packages
+        )
+
+        # Create a mock Dash app with real config object
+        class MockConfig:
+            def __init__(self):
+                self.assets_folder = 'assets'
+                self.assets_path_ignore = []
+
+        mock_app = MagicMock()
+        mock_app.config = MockConfig()
+
+        # Call _set_assets_path_ignore
+        plugin._set_assets_path_ignore(mock_app)
+
+        # Check that assets_path_ignore remains empty
+        assert mock_app.config.assets_path_ignore == []
+
+    def test_set_assets_path_ignore_complex_paths(self):
+        """Test _set_assets_path_ignore method with complex paths."""
+        build_assets_paths = [
+            'assets/js',
+            './assets/css/styles',
+            'assets/images/icons',
+            'public/assets/js',  # Should not match
+            './public/css'        # Should not match
+        ]
+        entry_js_paths = ['assets/js/main.js']
+        npm_packages = [NpmPackage('react')]
+
+        plugin = VitePlugin(
+            build_assets_paths=build_assets_paths, entry_js_paths=entry_js_paths, npm_packages=npm_packages
+        )
+
+        # Create a mock Dash app with real config object
+        class MockConfig:
+            def __init__(self):
+                self.assets_folder = 'assets'
+                self.assets_path_ignore = []
+
+        mock_app = MagicMock()
+        mock_app.config = MockConfig()
+
+        # Call _set_assets_path_ignore
+        plugin._set_assets_path_ignore(mock_app)
+
+        # Check that assets_path_ignore contains the correct paths
+        expected_ignore = ['js', 'css/styles', 'images/icons']
+        assert mock_app.config.assets_path_ignore == expected_ignore
+
     def test_build_assets_with_vite(self):
         """Test _build_assets_with_vite method."""
         build_assets_paths = ['assets/js']
