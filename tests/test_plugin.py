@@ -813,7 +813,7 @@ class TestVitePlugin:
             './assets/css/styles',
             'assets/images/icons',
             'public/assets/js',  # Should not match
-            './public/css'        # Should not match
+            './public/css',  # Should not match
         ]
         entry_js_paths = ['assets/js/main.js']
         npm_packages = [NpmPackage('react')]
