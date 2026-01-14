@@ -181,9 +181,11 @@ class VitePlugin:
                 # Remove prefix2 prefix
                 assets_to_ignore.append(path[len(prefix2) :])
 
-        # Set as assets_path_ignore if any paths were found
+        # Set assets_path_ignore if any paths were found
         if assets_to_ignore:
-            app.config.assets_path_ignore = assets_to_ignore
+            if not app.config.assets_path_ignore:
+                app.config.assets_path_ignore = []
+            app.config.assets_path_ignore.extend(assets_to_ignore)
 
     def _should_skip_build(self) -> bool:
         """
