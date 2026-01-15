@@ -107,6 +107,8 @@ pip install dash-vite-plugin
 - [React Bits Grid Scan Demo](./examples/react-bits-grid-scan-demo) - 示例：集成使用`react-bits`中的`GridScan`组件
 - [React Bits Lightning Demo](./examples/react-bits-lightning-demo) - 示例：集成使用`react-bits`中的`Lightning`组件
 - [React Bits Shiny Text Demo](./examples/react-bits-shiny-text-demo) - 示例：集成使用`react-bits`中的`ShinyText`组件
+- [Vue Basic Demo](./examples/vue-basic-demo) - 集成`Vue`的基础示例
+
 
 这些示例展示了如何使用不同前端框架设置插件，并包含测试回调以验证集成是否正常工作。
 
