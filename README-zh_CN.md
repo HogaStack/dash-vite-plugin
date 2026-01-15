@@ -103,8 +103,7 @@ pip install dash-vite-plugin
 
 有关详细的使用示例，请参阅示例文件：
 
-- [Vue.js 示例](example_vue.py) - 演示如何将插件与 Vue.js 一起使用
-- [React 示例](example_react.py) - 演示如何将插件与 React 一起使用
+- [React Basic Demo](./examples/react-basic-demo) - 集成`React`的基础示例
 
 这些示例展示了如何使用不同前端框架设置插件，并包含测试回调以验证集成是否正常工作。
 

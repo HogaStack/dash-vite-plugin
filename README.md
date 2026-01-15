@@ -103,8 +103,7 @@ Note: This plugin requires Python 3.8 or higher.
 
 For detailed usage examples, please refer to the example files:
 
-- [Vue.js Example](example_vue.py) - Demonstrates how to use the plugin with Vue.js
-- [React Example](example_react.py) - Demonstrates how to use the plugin with React
+- [React Basic Demo](./examples/react-basic-demo) - Basic usage with React
 
 These examples show how to set up the plugin with different frontend frameworks and include test callbacks to verify that the integration is working correctly.
 
