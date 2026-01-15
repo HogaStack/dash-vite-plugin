@@ -105,6 +105,7 @@ For detailed usage examples, please refer to the example files:
 
 - [React Basic Demo](./examples/react-basic-demo) - Basic usage with React
 - [React Bits Grid Scan Demo](./examples/react-bits-grid-scan-demo) - Example: integrating `react-bits` GridScan component
+- [React Bits Lightning Demo](./examples/react-bits-lightning-demo) - Example: integrating `react-bits` Lightning component
 
 These examples show how to set up the plugin with different frontend frameworks and include test callbacks to verify that the integration is working correctly.
 
