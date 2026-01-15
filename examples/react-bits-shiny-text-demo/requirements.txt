@@ -1,0 +1,4 @@
+dash-vite-plugin>=0.1.3
+feffery-antd-components>=0.4.2
+feffery-dash-utils>=0.2.6
+feffery-utils-components>=0.3.4
