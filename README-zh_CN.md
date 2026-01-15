@@ -104,6 +104,7 @@ pip install dash-vite-plugin
 有关详细的使用示例，请参阅示例文件：
 
 - [React Basic Demo](./examples/react-basic-demo) - 集成`React`的基础示例
+- [React Bits Grid Scan Demo](./examples/react-bits-grid-scan-demo) - 示例：集成使用`react-bits`中的`GridScan`组件
 
 这些示例展示了如何使用不同前端框架设置插件，并包含测试回调以验证集成是否正常工作。
 
