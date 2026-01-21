@@ -42,6 +42,7 @@ class TestVitePlugin:
         assert plugin.clean_after is False
         assert plugin.skip_build_if_recent is True
         assert plugin.skip_build_time_threshold == 5
+        assert plugin.skip_build is False
 
     def test_plugin_initialization_with_custom_parameters(self):
         """Test plugin initialization with custom parameters."""
@@ -59,6 +60,7 @@ class TestVitePlugin:
             download_node=True,
             node_version='20.0.0',
             clean_after=True,
+            skip_build=True,
             skip_build_if_recent=False,
             skip_build_time_threshold=10,
         )
@@ -72,6 +74,7 @@ class TestVitePlugin:
         assert plugin.download_node is True
         assert plugin.node_version == '20.0.0'
         assert plugin.clean_after is True
+        assert plugin.skip_build is True
         assert plugin.skip_build_if_recent is False
         assert plugin.skip_build_time_threshold == 10
 
@@ -398,6 +401,25 @@ class TestVitePlugin:
 
         # Should return empty string
         assert tags == ''
+
+    def test_skip_build_param(self):
+        """Test the skip build logic when skip_build param is True."""
+        build_assets_paths = ['assets/js']
+        entry_js_paths = ['assets/js/main.js']
+        npm_packages = [NpmPackage('react')]
+
+        plugin = VitePlugin(
+            build_assets_paths=build_assets_paths,
+            entry_js_paths=entry_js_paths,
+            npm_packages=npm_packages,
+            skip_build=True,
+        )
+
+        # Check the skip logic directly
+        should_skip = plugin._should_skip_build()
+
+        # Should be True
+        assert should_skip is True
 
     def test_skip_build_logic_recent_file(self):
         """Test the skip build logic when file is recent."""

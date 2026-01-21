@@ -131,6 +131,7 @@ VitePlugin 是负责管理 Vite 构建过程的主要插件类。
 | download_node | bool | False | 如果未找到是否下载 Node.js |
 | node_version | str | '18.17.0' | 要下载的 Node.js 版本 |
 | clean_after | bool | False | 构建后是否清理生成的文件 |
+| skip_build | bool | False | 是否跳过构建执行 |
 | skip_build_if_recent | bool | True | 如果构建文件是最近生成的是否跳过构建 |
 | skip_build_time_threshold | int | 5 | 考虑构建文件为最近的时间阈值（秒）|
 

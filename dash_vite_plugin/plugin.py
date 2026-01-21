@@ -29,6 +29,7 @@ class VitePlugin:
         download_node: bool = False,
         node_version: str = '18.20.8',
         clean_after: bool = False,
+        skip_build: bool = False,
         skip_build_if_recent: bool = True,
         skip_build_time_threshold: int = 5,
     ) -> None:
@@ -45,6 +46,7 @@ class VitePlugin:
             download_node (bool): Whether to download Node.js if not found
             node_version (str): Node.js version to download if download_node is True
             clean_after (bool): Whether to clean up generated files after build
+            skip_build (bool): Whether to skip build execution
             skip_build_if_recent (bool): Whether to skip build if built file was recently generated
             skip_build_time_threshold (int): Time threshold in seconds to consider built file as recent
         """
@@ -57,6 +59,7 @@ class VitePlugin:
         self.download_node = download_node
         self.node_version = node_version
         self.clean_after = clean_after
+        self.skip_build = skip_build
         self.skip_build_if_recent = skip_build_if_recent
         self.skip_build_time_threshold = skip_build_time_threshold
         self.vite_command = ViteCommand(
@@ -194,6 +197,8 @@ class VitePlugin:
         Returns:
             bool: True if the build should be skipped, False otherwise
         """
+        if self.skip_build:
+            return True
         # Check if CSS file exists and was generated recently (within threshold seconds)
         check_index_path = os.path.join(self.plugin_tmp_dir, 'dist', 'index.html')
         if self.skip_build_if_recent and os.path.exists(check_index_path):

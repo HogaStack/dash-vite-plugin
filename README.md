@@ -130,6 +130,7 @@ VitePlugin is the main plugin class responsible for managing the Vite build proc
 | download_node | bool | False | Whether to download Node.js if not found |
 | node_version | str | '18.17.0' | Node.js version to download |
 | clean_after | bool | False | Whether to clean up generated files after build |
+| skip_build | bool | False | Whether to skip build execution |
 | skip_build_if_recent | bool | True | Whether to skip build if built file was recently generated |
 | skip_build_time_threshold | int | 5 | Time threshold in seconds to consider built file as recent |
 
