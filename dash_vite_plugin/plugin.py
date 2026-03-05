@@ -6,7 +6,7 @@ import time
 from dash import Dash, hooks
 from flask import send_from_directory
 from py_node_manager import get_logger
-from typing import List
+from typing import List, Literal
 from .utils import NpmPackage, ViteCommand
 
 
@@ -29,6 +29,7 @@ class VitePlugin:
         download_node: bool = False,
         node_version: str = '18.20.8',
         clean_after: bool = False,
+        log_show_mode: Literal['all', 'slim', 'hide'] = 'all',
         skip_build: bool = False,
         skip_build_if_recent: bool = True,
         skip_build_time_threshold: int = 5,
@@ -46,6 +47,7 @@ class VitePlugin:
             download_node (bool): Whether to download Node.js if not found
             node_version (str): Node.js version to download if download_node is True
             clean_after (bool): Whether to clean up generated files after build
+            log_show_mode (Literal['all', 'slim', 'hide']): Log show mode
             skip_build (bool): Whether to skip build execution
             skip_build_if_recent (bool): Whether to skip build if built file was recently generated
             skip_build_time_threshold (int): Time threshold in seconds to consider built file as recent
@@ -59,6 +61,7 @@ class VitePlugin:
         self.download_node = download_node
         self.node_version = node_version
         self.clean_after = clean_after
+        self.log_show_mode = log_show_mode
         self.skip_build = skip_build
         self.skip_build_if_recent = skip_build_if_recent
         self.skip_build_time_threshold = skip_build_time_threshold
@@ -71,6 +74,7 @@ class VitePlugin:
             download_node=download_node,
             node_version=node_version,
             is_cli=False,
+            log_show_mode=log_show_mode,
         )
         self._clean_files = []
         self._clean_dirs = []
@@ -205,10 +209,11 @@ class VitePlugin:
             file_mod_time = os.path.getmtime(check_index_path)
             current_time = time.time()
             if current_time - file_mod_time < self.skip_build_time_threshold:
-                logger.info(
-                    f'⚡ Built assets file was generated recently '
-                    f'({current_time - file_mod_time:.2f}s ago), skipping build...'
-                )
+                if self.log_show_mode in ['all', 'slim']:
+                    logger.info(
+                        f'⚡ Built assets file was generated recently '
+                        f'({current_time - file_mod_time:.2f}s ago), skipping build...'
+                    )
                 return True
         return False
 
