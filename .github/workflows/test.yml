@@ -49,7 +49,7 @@ jobs:
 
       - name: Run tests
         run: |
-          python -m pytest tests/ -v --cov=dash_vite_plugin --cov-report=xml
+          python -m pytest tests/ -v --headless --cov=dash_vite_plugin --cov-report=xml
         env:
           DISPLAY: :99
 
