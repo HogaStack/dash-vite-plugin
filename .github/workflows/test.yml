@@ -29,17 +29,21 @@ jobs:
           pip install -e .
           pip install -r requirements-dev.txt
 
-      - name: Install browser for testing
-        id: setup-chrome
-        uses: browser-actions/setup-chrome@v2
-        with:
-          install-chromedriver: true
-
-      - name: Configure Chrome for Dash testing
-        shell: bash
+      - name: Install browser for testing (Ubuntu)
+        if: matrix.os == 'ubuntu-latest'
         run: |
-          echo "DASH_TEST_CHROMEPATH=${{ steps.setup-chrome.outputs.chrome-path }}" >> "$GITHUB_ENV"
-          echo "$(dirname '${{ steps.setup-chrome.outputs.chromedriver-path }}')" >> "$GITHUB_PATH"
+          sudo apt-get update
+          sudo apt-get install -y chromium-browser chromium-chromedriver xvfb
+
+      - name: Install browser for testing (macOS)
+        if: matrix.os == 'macos-latest'
+        run: |
+          brew install --cask chromium chromedriver
+
+      - name: Install browser for testing (Windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          choco install chromium chromedriver
 
       - name: Start virtual display (Ubuntu)
         if: matrix.os == 'ubuntu-latest'
