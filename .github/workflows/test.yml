@@ -30,7 +30,7 @@ jobs:
           pip install -r requirements-dev.txt
 
       - name: Install browser for testing
-        uses: browser-actions/setup-chrome@latest
+        uses: browser-actions/setup-chrome@v2
         with:
           install-chromedriver: true
 
