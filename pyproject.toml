@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "dash-vite-plugin"
-version = "0.1.3"
+version = "0.1.4"
 description = "A Dash plugin for integrating Vite using Dash 3.x hooks"
 readme = "README.md"
 requires-python = ">=3.8"
@@ -26,7 +26,7 @@ classifiers = [
 ]
 dependencies = [
     "dash>=3.0.3",
-    "py-node-manager>=0.1.1",
+    "py-node-manager>=0.1.2",
 ]
 
 [project.urls]
