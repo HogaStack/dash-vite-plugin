@@ -38,6 +38,7 @@ class ViteCommand:
         download_node: bool,
         node_version: str,
         is_cli: bool,
+        log_show_mode: Literal['all', 'slim', 'hide'] = 'all',
     ):
         """
         Initialize the ViteCommand class
@@ -51,8 +52,11 @@ class ViteCommand:
             download_node (bool): Whether to download Node.js if not found
             node_version (str): Node.js version to download if download_node is True
             is_cli (bool): Whether the command is being run from the CLI
+            log_show_mode (Literal['all', 'slim', 'hide']): Log show mode
         """
-        node_manager = NodeManager(download_node=download_node, node_version=node_version, is_cli=False)
+        node_manager = NodeManager(
+            download_node=download_node, node_version=node_version, is_cli=False, log_show_mode=log_show_mode
+        )
         self.node_path = node_manager.node_path
         self.node_env = node_manager.node_env
         self.npm_path = node_manager.npm_path
@@ -62,6 +66,7 @@ class ViteCommand:
         self.support_less = support_less
         self.support_sass = support_sass
         self.is_cli = is_cli
+        self.log_show_mode = log_show_mode
         # Ensure the plugin_tmp_dir directory exists
         self.plugin_tmp_dir = plugin_tmp_dir
         if not os.path.exists(self.plugin_tmp_dir):
@@ -215,7 +220,8 @@ export default defineConfig(({ command }) => {
         Returns:
             None
         """
-        logger.info('📥 Start installing Vite...')
+        if self.log_show_mode == 'all':
+            logger.info('📥 Start installing Vite...')
         try:
             if not self._check_vite():
                 install_cmd = [
@@ -237,10 +243,12 @@ export default defineConfig(({ command }) => {
                 if result.returncode != 0:
                     raise RuntimeError(result.stderr)
 
-            logger.info('✅ Vite installed successfully!')
+            if self.log_show_mode in ['all', 'slim']:
+                logger.info('✅ Vite installed successfully!')
 
         except Exception as e:
-            logger.error(f'❌ Error installing Vite: {e}')
+            if self.log_show_mode in ['all', 'slim']:
+                logger.error(f'❌ Error installing Vite: {e}')
             raise e
 
     def _install_less(self) -> None:
@@ -250,7 +258,8 @@ export default defineConfig(({ command }) => {
         Returns:
             None
         """
-        logger.info('📥 Start installing Less...')
+        if self.log_show_mode == 'all':
+            logger.info('📥 Start installing Less...')
         try:
             if not self._check_less():
                 install_cmd = [
@@ -270,10 +279,12 @@ export default defineConfig(({ command }) => {
                 if result.returncode != 0:
                     raise RuntimeError(result.stderr)
 
-            logger.info('✅ Less installed successfully!')
+            if self.log_show_mode in ['all', 'slim']:
+                logger.info('✅ Less installed successfully!')
 
         except Exception as e:
-            logger.error(f'❌ Error installing Less: {e}')
+            if self.log_show_mode in ['all', 'slim']:
+                logger.error(f'❌ Error installing Less: {e}')
             raise e
 
     def _install_sass(self) -> None:
@@ -283,7 +294,8 @@ export default defineConfig(({ command }) => {
         Returns:
             None
         """
-        logger.info('📥 Start installing Sass...')
+        if self.log_show_mode == 'all':
+            logger.info('📥 Start installing Sass...')
         try:
             if not self._check_sass():
                 install_cmd = [
@@ -303,10 +315,12 @@ export default defineConfig(({ command }) => {
                 if result.returncode != 0:
                     raise RuntimeError(result.stderr)
 
-            logger.info('✅ Sass installed successfully!')
+            if self.log_show_mode in ['all', 'slim']:
+                logger.info('✅ Sass installed successfully!')
 
         except Exception as e:
-            logger.error(f'❌ Error installing Sass: {e}')
+            if self.log_show_mode in ['all', 'slim']:
+                logger.error(f'❌ Error installing Sass: {e}')
             raise e
 
     def _install_npm_packages(self) -> None:
@@ -316,7 +330,8 @@ export default defineConfig(({ command }) => {
         Returns:
             None
         """
-        logger.info('📥 Start installing npm packages...')
+        if self.log_show_mode == 'all':
+            logger.info('📥 Start installing npm packages...')
         try:
             for package in self.npm_packages:
                 install_cmd = [
@@ -336,10 +351,12 @@ export default defineConfig(({ command }) => {
                 if result.returncode != 0:
                     raise RuntimeError(result.stderr)
 
-            logger.info('✅ npm packages installed successfully!')
+            if self.log_show_mode in ['all', 'slim']:
+                logger.info('✅ npm packages installed successfully!')
 
         except Exception as e:
-            logger.error(f'❌ Error installing npm packages: {e}')
+            if self.log_show_mode in ['all', 'slim']:
+                logger.error(f'❌ Error installing npm packages: {e}')
             raise e
 
     def init(self) -> Self:
@@ -349,27 +366,28 @@ export default defineConfig(({ command }) => {
         Returns:
             Self: The ViteCommand instance
         """
-        logger.info('🚀 Start initializing Vite...')
+        if self.log_show_mode == 'all':
+            logger.info('🚀 Start initializing Vite...')
         try:
             # Create default config if it doesn't exist
-            if self.is_cli:
+            if self.is_cli and self.log_show_mode == 'all':
                 logger.info('⚙️ Creating Vite config file...')
 
             if not os.path.exists(self.config_js_path):
-                if self.is_cli:
+                if self.is_cli and self.log_show_mode == 'all':
                     logger.info(f'🔍 Config file {self.config_js_path} not found. Creating default config file...')
 
                 self.create_default_vite_config()
 
-                if self.is_cli:
+                if self.is_cli and self.log_show_mode == 'all':
                     logger.info(f'💾 Default config file created at: {self.config_js_path}')
 
-            if self.is_cli:
+            if self.is_cli and self.log_show_mode == 'all':
                 logger.info('⚙️ Creating index.html file...')
 
             self.create_default_index_html()
 
-            if self.is_cli:
+            if self.is_cli and self.log_show_mode == 'all':
                 logger.info(f'💾 Default index.html file created at: {self.index_html_path}')
 
             if not self._check_npm_init():
@@ -384,11 +402,12 @@ export default defineConfig(({ command }) => {
                 )
                 if result.returncode != 0:
                     raise RuntimeError(result.stderr)
-
-            logger.info('✅ Vite initialized successfully!')
+            if self.log_show_mode in ['all', 'slim']:
+                logger.info('✅ Vite initialized successfully!')
 
         except Exception as e:
-            logger.error(f'❌ Error initializing Vite: {e}')
+            if self.log_show_mode in ['all', 'slim']:
+                logger.error(f'❌ Error initializing Vite: {e}')
             raise e
 
         return self
@@ -416,7 +435,8 @@ export default defineConfig(({ command }) => {
         Returns:
             Self: The ViteCommand instance
         """
-        logger.info('🔨 Building assets using Vite...')
+        if self.log_show_mode == 'all':
+            logger.info('🔨 Building assets using Vite...')
         try:
             build_cmd: List[str] = [self.npx_path, 'vite', 'build']
 
@@ -427,10 +447,12 @@ export default defineConfig(({ command }) => {
             if result.returncode != 0:
                 raise RuntimeError(result.stderr)
 
-            logger.info('✅ Build completed successfully!')
+            if self.log_show_mode in ['all', 'slim']:
+                logger.info('✅ Build completed successfully!')
 
         except Exception as e:
-            logger.error(f'❌ Error building assets using Vite: {e}')
+            if self.log_show_mode in ['all', 'slim']:
+                logger.error(f'❌ Error building assets using Vite: {e}')
             raise e
 
         return self
@@ -446,7 +468,8 @@ export default defineConfig(({ command }) => {
         Returns:
             Self: The ViteCommand instance
         """
-        logger.info('🧹 Cleaning up generated files...')
+        if self.log_show_mode == 'all':
+            logger.info('🧹 Cleaning up generated files...')
         try:
             files_to_remove = [
                 self.config_js_path,
@@ -464,25 +487,29 @@ export default defineConfig(({ command }) => {
                 if os.path.exists(file_path):
                     try:
                         os.remove(file_path)
-                        if self.is_cli:
+                        if self.is_cli and self.log_show_mode == 'all':
                             logger.info(f'🗑️ Removed {file_path}')
                     except Exception as e:
-                        logger.warning(f'⚠️ Warning: Could not remove {file_path}: {e}')
+                        if self.log_show_mode in ['all', 'slim']:
+                            logger.warning(f'⚠️ Warning: Could not remove {file_path}: {e}')
 
             # Remove directories
             for dir_path in directories_to_remove:
                 if os.path.exists(dir_path):
                     try:
                         shutil.rmtree(dir_path)
-                        if self.is_cli:
+                        if self.is_cli and self.log_show_mode == 'all':
                             logger.info(f'🗑️ Removed {dir_path}')
                     except Exception as e:
-                        logger.warning(f'⚠️ Warning: Could not remove {dir_path}: {e}')
+                        if self.log_show_mode in ['all', 'slim']:
+                            logger.warning(f'⚠️ Warning: Could not remove {dir_path}: {e}')
 
-            logger.info('✅ Cleanup completed.')
+            if self.log_show_mode in ['all', 'slim']:
+                logger.info('✅ Cleanup completed.')
 
         except Exception as e:
-            logger.error(f'❌ Error cleaning up: {e}')
+            if self.log_show_mode in ['all', 'slim']:
+                logger.error(f'❌ Error cleaning up: {e}')
             raise e
 
         return self

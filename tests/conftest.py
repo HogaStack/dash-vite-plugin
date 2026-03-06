@@ -3,6 +3,7 @@ import pytest
 import sys
 import shutil
 import tempfile
+from selenium.webdriver.chrome.options import Options
 
 
 # Add the project root to the Python path so we can import the package
@@ -26,3 +27,11 @@ def temp_working_directory():
     yield temp_dir
     os.chdir(original_cwd)
     shutil.rmtree(temp_dir, ignore_errors=True)
+
+
+def pytest_setup_options():
+    options = Options()
+    chrome_binary = os.environ.get('CHROME_BINARY')
+    if chrome_binary:
+        options.binary_location = chrome_binary
+    return options
