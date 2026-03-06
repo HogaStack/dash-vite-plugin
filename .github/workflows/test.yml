@@ -35,15 +35,34 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y chromium-browser chromium-chromedriver xvfb
 
+      - name: Set Chromium binary (Ubuntu)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          if [ -x /usr/bin/chromium-browser ]; then
+            echo "CHROME_BINARY=/usr/bin/chromium-browser" >> $GITHUB_ENV
+          elif [ -x /usr/bin/chromium ]; then
+            echo "CHROME_BINARY=/usr/bin/chromium" >> $GITHUB_ENV
+          fi
+
       - name: Install browser for testing (macOS)
         if: matrix.os == 'macos-latest'
         run: |
           brew install --cask chromium chromedriver
 
+      - name: Set Chromium binary (macOS)
+        if: matrix.os == 'macos-latest'
+        run: |
+          echo "CHROME_BINARY=/Applications/Chromium.app/Contents/MacOS/Chromium" >> $GITHUB_ENV
+
       - name: Install browser for testing (Windows)
         if: matrix.os == 'windows-latest'
         run: |
           choco install chromium chromedriver
+
+      - name: Set Chromium binary (Windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          "CHROME_BINARY=C:\Program Files\Chromium\Application\chrome.exe" | Out-File -FilePath $env:GITHUB_ENV -Append
 
       - name: Start virtual display (Ubuntu)
         if: matrix.os == 'ubuntu-latest'
